@@ -3,7 +3,7 @@ import { Task } from "../../types/task";
 import { ApiTask } from "../../types/api";
 
 export const getTasks = async (): Promise<Task[]> => {
-  const response = await apiClient.get("/todos");
+  const response = await apiClient.get("/todos?_limit=5");
 
   return response.data.map((apiTask: ApiTask) => ({
     id: apiTask.id,
