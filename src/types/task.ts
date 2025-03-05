@@ -1,4 +1,5 @@
 export type Priority = "alta" | "media" | "baja";
+export type TaskId = number;
 
 export interface Task {
   id: number;
@@ -19,10 +20,22 @@ export interface TaskUpdate {
   priority?: Priority;
 }
 
-export interface FilterStrategy {
-  filter(tasks: Task[]): Task[];
+export interface TaskFetcher {
+  fetchAll(): Promise<Task[]>;
 }
 
-export interface TaskFormProps {
-  onSubmit: (title: string, priority: Priority) => void;
+export interface TaskCreator {
+  create(task: TaskCreation): Promise<Task>;
+}
+
+export interface TaskUpdater {
+  update(id: TaskId, updates: TaskUpdate): Promise<Task>;
+}
+
+export interface TaskDeleter {
+  delete(id: TaskId): Promise<void>;
+}
+
+export interface TaskFilter {
+  filter(tasks: Task[]): Task[];
 }
