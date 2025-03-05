@@ -54,8 +54,8 @@ export const TaskList: FC<TaskListProps> = ({ tasks, onDelete, error }) => {
               whileTap={{ scale: 0.97 }}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 filter === option.value
-                  ? "bg-blue-500 text-white shadow-md"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
+                  ? "bg-blue-500 text-gray-900 dark:text-white font-bold shadow-md border border-blue-600"
+                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
               }`}
             >
               {option.label}
