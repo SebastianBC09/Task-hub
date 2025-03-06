@@ -44,7 +44,7 @@ export const TaskList: FC<TaskListProps> = ({ tasks, onDelete, error }) => {
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <div className="sticky top-0 z-10 bg-gray-50 p-3 -mx-3 rounded-xl">
+      <div className="sticky top-0 z-10 bg-gray-50 dark:bg-gray-800 p-3 -mx-3 rounded-xl">
         <div className="flex items-center gap-2 overflow-auto pb-1 scrollbar-hide">
           {filterOptions.map((option) => (
             <motion.button
@@ -54,8 +54,8 @@ export const TaskList: FC<TaskListProps> = ({ tasks, onDelete, error }) => {
               whileTap={{ scale: 0.97 }}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 filter === option.value
-                  ? "bg-blue-500 text-gray-900 dark:text-white font-bold shadow-md border border-blue-600"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                  ? "bg-blue-500 text-white dark:bg-blue-600 dark:text-white font-bold shadow-md border border-blue-600 dark:border-blue-700"
+                  : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600"
               }`}
             >
               {option.label}
@@ -70,8 +70,8 @@ export const TaskList: FC<TaskListProps> = ({ tasks, onDelete, error }) => {
           animate={{ opacity: 1, y: 0 }}
           className="py-16 text-center"
         >
-          <p className="text-gray-500 mb-2">Aún no hay tareas</p>
-          <p className="text-gray-400 text-sm">Agrega tu primera tarea usando el formulario</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-2">Aún no hay tareas</p>
+          <p className="text-gray-400 dark:text-gray-500 text-sm">Agrega tu primera tarea usando el formulario</p>
         </motion.div>
       ) : filteredTasks.length === 0 ? (
         <motion.div
@@ -79,8 +79,8 @@ export const TaskList: FC<TaskListProps> = ({ tasks, onDelete, error }) => {
           animate={{ opacity: 1, y: 0 }}
           className="py-16 text-center"
         >
-          <p className="text-gray-500 mb-2">No hay tareas con esta prioridad</p>
-          <p className="text-gray-400 text-sm">Prueba con otro filtro o agrega más tareas</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-2">No hay tareas con esta prioridad</p>
+          <p className="text-gray-400 dark:text-gray-500 text-sm">Prueba con otro filtro o agrega más tareas</p>
         </motion.div>
       ) : (
         <motion.div

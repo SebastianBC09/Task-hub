@@ -7,7 +7,7 @@ import { TaskForm } from '../components/TaskForm';
 import { TaskList } from '../components/TaskList';
 
 const TaskHub: FC = () => {
-  const { data: tasks = [], isLoading, isError, error } = useTasks();
+  const { tasks, isLoading } = useTasks();
   const { mutate: createTask } = useCreateTask();
   const { mutate: deleteTask } = useDeleteTask();
   const [showHero, setShowHero] = useState(true);
@@ -20,13 +20,13 @@ const TaskHub: FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 w-full">
       <AnimatePresence>
         {showHero && (
           <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-white w-full"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-gray-900 w-full"
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -45,12 +45,12 @@ const TaskHub: FC = () => {
                   duration: 1.5,
                   ease: "easeInOut"
                 }}
-                className="text-5xl mb-4"
+                className="text-5xl mb-4 text-blue-500 dark:text-blue-400"
               >
                 ✓
               </motion.div>
               <motion.h1
-                className="text-3xl font-bold text-blue-600"
+                className="text-3xl font-bold text-blue-600 dark:text-blue-400"
                 animate={{
                   opacity: [0, 1],
                   y: [20, 0]
@@ -73,11 +73,11 @@ const TaskHub: FC = () => {
               className="w-full"
             >
               <motion.h1
-                className="text-3xl font-bold text-gray-900 mb-2 flex items-center"
+                className="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center"
                 layoutId="app-title"
               >
                 <motion.span
-                  className="text-blue-500 mr-2"
+                  className="text-blue-500 dark:text-blue-400 mr-2"
                   animate={{ rotate: [0, 15, 0, 15, 0] }}
                   transition={{ duration: 1, delay: 2, repeat: 0 }}
                 >
@@ -85,7 +85,7 @@ const TaskHub: FC = () => {
                 </motion.span>
                 TaskHub
               </motion.h1>
-              <p className="text-gray-600">Gestiona tus tareas de forma eficiente</p>
+              <p className="text-gray-600 dark:text-gray-300">Gestiona tus tareas de forma eficiente</p>
             </motion.div>
           </header>
 
@@ -96,29 +96,10 @@ const TaskHub: FC = () => {
                 animate={{ opacity: 1 }}
               >
                 <motion.div
-                  className="w-10 h-10 border-4 border-blue-500 rounded-full border-t-transparent"
+                  className="w-10 h-10 border-4 border-blue-500 dark:border-blue-400 rounded-full border-t-transparent dark:border-t-transparent"
                   animate={{ rotate: 360 }}
                   transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
                 />
-              </motion.div>
-            ) : isError ? (
-              <motion.div
-                className="bg-red-50 border-l-4 border-red-500 p-4 rounded mx-4 sm:mx-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <div className="flex w-full">
-                  <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm text-red-700">
-                      Error al cargar las tareas. Por favor, intenta refrescar la página.
-                    </p>
-                  </div>
-                </div>
               </motion.div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-0 w-full">
@@ -133,7 +114,6 @@ const TaskHub: FC = () => {
                   <TaskList
                     tasks={tasks}
                     onDelete={deleteTask}
-                    error={error as string}
                   />
                 </div>
               </div>

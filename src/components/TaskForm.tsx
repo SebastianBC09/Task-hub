@@ -35,7 +35,7 @@ export const TaskForm: FC<TaskFormProps> = ({ onSubmit }) => {
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
       className="mb-8"
     >
-      <form onSubmit={handleSubmit} className="relative flex flex-col gap-4 p-6 bg-white rounded-2xl shadow-lg sm:flex-row sm:items-end">
+      <form onSubmit={handleSubmit} className="relative flex flex-col gap-4 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/30 sm:flex-row sm:items-end">
         <div className="flex-1 space-y-2">
           <motion.div
             animate={{
@@ -43,7 +43,7 @@ export const TaskForm: FC<TaskFormProps> = ({ onSubmit }) => {
               scale: focused || title ? 0.85 : 1,
               opacity: focused || title ? 0.7 : 1
             }}
-            className="absolute text-gray-500 pointer-events-none origin-left ml-2"
+            className="absolute text-gray-500 dark:text-gray-400 pointer-events-none origin-left ml-2"
           >
             Nueva tarea...
           </motion.div>
@@ -54,11 +54,11 @@ export const TaskForm: FC<TaskFormProps> = ({ onSubmit }) => {
             onChange={(e) => setTitle(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className="w-full p-3 border-b-2 border-gray-200 focus:border-blue-500 outline-none transition-all duration-200 bg-transparent"
+            className="w-full p-3 border-b-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all duration-200 bg-transparent dark:text-white"
           />
 
           <motion.select
-            className="w-full p-3 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+            className="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-700 outline-none transition-all dark:text-white"
             value={priority}
             onChange={(e) => setPriority(e.target.value as Priority)}
             whileTap={{ scale: 0.98 }}
@@ -74,7 +74,7 @@ export const TaskForm: FC<TaskFormProps> = ({ onSubmit }) => {
           disabled={submitting}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-xl font-medium shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 min-w-max"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white py-3 px-6 rounded-xl font-medium shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-500 min-w-max"
         >
           {submitting ? (
             <motion.span
