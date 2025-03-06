@@ -2,7 +2,7 @@
 
 ## 📖 Descripción
 
-Una aplicación de gestión de tareas desarrollada con **React, TypeScript y Zustand**, que permite organizar tareas con prioridades y subtareas. Se han aplicado patrones de diseño como **Strategy** para el filtrado de tareas y **Composite** para la gestión de subtareas, asegurando un código modular y reutilizable.
+Una aplicación de gestión de tareas desarrollada con **React, TypeScript y Zustand**, que permite organizar tareas con prioridades y subtareas. Se han aplicado patrones de diseño como **Strategy** para el filtrado de tareas asegurando un código modular y reutilizable.
 
 ---
 
@@ -22,8 +22,7 @@ Una aplicación de gestión de tareas desarrollada con **React, TypeScript y Zus
 ✔ **Agregar tareas** con prioridad (Alta, Media, Baja).\
 ✔ **Marcar tareas como completadas**.\
 ✔ **Eliminar tareas**.\
-✔ **Filtrar tareas** por prioridad y estado (Pendientes/Completadas).\
-✔ **Agrupar tareas y subtareas** (Patrón Composite).\
+✔ **Filtrar tareas** por prioridad y estado (Completadas).\
 ✔ **Persistencia de tareas** con Zustand y React Query.\
 ✔ **Interfaz animada** con Framer Motion.
 
@@ -62,8 +61,6 @@ src/
 ├── types/             # Tipos y patrones de diseño
 │   ├── strategies/    # Patrón Strategy (Filtrado de tareas)
 │   │   ├── filterStrategies.ts
-│   ├── composite/     # Patrón Composite (Gestión de subtareas)
-│   │   ├── taskComposite.ts
 │   ├── task.ts        # Definiciones de tipos de tareas
 │
 └── App.tsx            # Punto de entrada de la app
@@ -87,19 +84,6 @@ export class PriorityFilterStrategy implements FilterStrategy {
   filter(tasks: Task[]): Task[] {
     return tasks.filter(task => task.priority === this.priority);
   }
-}
-```
-
-### 🌳 **Composite (Gestión de Subtareas)**
-
-El patrón **Composite** permite modelar la relación jerárquica entre tareas principales y subtareas, facilitando la organización y manipulación estructurada de datos.
-
-```typescript
-export class TaskComposite {
-  private subtasks: TaskComposite[] = [];
-  constructor(public id: number, public title: string) {}
-  addSubtask(task: TaskComposite) { this.subtasks.push(task); }
-  getSubtasks(): TaskComposite[] { return this.subtasks; }
 }
 ```
 
