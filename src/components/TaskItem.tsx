@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { PriorityBadge } from "./PriorityBadge";
 import { motion } from "framer-motion";
 import { Task } from '../types/task';
+import { useUpdateTask } from "../hooks/useUpdateTask";
 
 interface TaskItemProps {
   task: Task;
@@ -10,13 +11,17 @@ interface TaskItemProps {
 
 export const TaskItem: FC<TaskItemProps> = ({ task, onDelete }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const { mutate: updateTask } = useUpdateTask();
 
   const handleDelete = () => {
     setIsDeleting(true);
-    // Pequeño retraso para la animación antes de eliminar
     setTimeout(() => {
       onDelete(task.id);
     }, 300);
+  };
+
+  const toggleCompletion = () => {
+    updateTask({ id: task.id, updates: { completed: !task.completed } });
   };
 
   return (
@@ -36,16 +41,26 @@ export const TaskItem: FC<TaskItemProps> = ({ task, onDelete }) => {
         opacity: { duration: 0.2 }
       }}
       whileHover={{ y: -4, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
-      className="flex justify-between items-center bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-5 group"
+      className={`flex justify-between items-center bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-5 group transition-all ${
+        task.completed ? "opacity-50 line-through" : ""
+      }`}
     >
-      <div className="flex flex-col gap-2 sm:gap-3">
-        <motion.h3
-          className="text-lg font-medium text-gray-800 dark:text-gray-100"
-          layoutId={`title-${task.id}`}
-        >
-          {task.title}
-        </motion.h3>
-        <PriorityBadge priority={task.priority} />
+      <div className="flex items-center gap-3">
+        <input
+          type="checkbox"
+          checked={task.completed}
+          onChange={toggleCompletion}
+          className="w-5 h-5 cursor-pointer accent-blue-500"
+        />
+        <div className="flex flex-col gap-2 sm:gap-3">
+          <motion.h3
+            className="text-lg font-medium text-gray-800 dark:text-gray-100"
+            layoutId={`title-${task.id}`}
+          >
+            {task.title}
+          </motion.h3>
+          <PriorityBadge priority={task.priority} />
+        </div>
       </div>
 
       <motion.button
@@ -56,7 +71,7 @@ export const TaskItem: FC<TaskItemProps> = ({ task, onDelete }) => {
         className="relative bg-white dark:bg-gray-700 text-red-500 dark:text-red-400 p-2 rounded-full overflow-hidden opacity-70 group-hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-200 dark:focus:ring-red-700 transition-all duration-200"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6" />
+          <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 2 0 012-2h4a2 2 2 0 012 2v2M10 11v6M14 11v6" />
         </svg>
 
         <motion.div
