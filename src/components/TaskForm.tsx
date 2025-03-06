@@ -13,21 +13,20 @@ export const TaskForm: FC<TaskFormProps> = ({ onSubmit }) => {
   const [focused, setFocused] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim() || submitting) return;
+  e.preventDefault();
+  if (!title.trim() || submitting) return;
 
-    setSubmitting(true);
-    try {
-      await onSubmit(title, priority);
-      setTitle("");
-      // Pequeña animación de éxito
-      const form = e.currentTarget as HTMLFormElement;
-      form.classList.add("opacity-70");
-      setTimeout(() => form.classList.remove("opacity-70"), 300);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  setSubmitting(true);
+  try {
+    await onSubmit(title, priority);
+    setTitle("");
+    setPriority("media");
+  } catch (error) {
+    console.error("Error al crear la tarea:", error);
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <motion.div
