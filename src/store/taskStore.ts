@@ -8,7 +8,7 @@ type TaskState = {
   actions: {
     setInitialTasks: (tasks: Task[]) => void;
     addClientTask: (task: Task) => void;
-    updateClientTask: (id: number, updates: TaskUpdate) => void;
+    updateTask: (id: number, updates: TaskUpdate) => void;
     deleteClientTask: (id: number) => void;
   };
 };
@@ -21,8 +21,11 @@ export const useTaskStore = create<TaskState>((set) => ({
     setInitialTasks: (tasks) => set({ initialTasks: tasks }),
     addClientTask: (task) =>
       set((state) => ({ clientTasks: [...state.clientTasks, task] })),
-    updateClientTask: (id, updates) =>
+    updateTask: (id, updates) =>
       set((state) => ({
+        initialTasks: state.initialTasks.map((t) =>
+          t.id === id ? { ...t, ...updates } : t
+        ),
         clientTasks: state.clientTasks.map((t) =>
           t.id === id ? { ...t, ...updates } : t
         ),
