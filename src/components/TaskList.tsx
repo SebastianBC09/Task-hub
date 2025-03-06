@@ -1,31 +1,24 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { TaskItem } from "./TaskItem";
 import { motion, AnimatePresence } from "framer-motion";
-import { Task, Priority } from "../types/task";
+import { Priority } from "../types/task";
+import { useTasks } from "../hooks/useTasks";
+import { useDeleteTask } from "../hooks/useDeleteTask";
 
-interface TaskListProps {
-  tasks: Task[];
-  onDelete: (id: number) => void;
-  error?: string;
-}
-
-export const TaskList: FC<TaskListProps> = ({ tasks, onDelete, error }) => {
-  const [filter, setFilter] = useState<Priority | "todas">("todas");
+export const TaskList: FC = () => {
+  const { tasks, setFilter } = useTasks();
+  const { mutate: deleteTask } = useDeleteTask();
+  const [filter, setLocalFilter] = useState<Priority | "todas">("todas");
   const [isFiltering, setIsFiltering] = useState(false);
 
   useEffect(() => {
-    if (error) {
-      // Mostramos un mensaje de error más elegante que un alert
-      console.error(error);
-    }
-  }, [error]);
-
-  const filteredTasks = filter === "todas" ? tasks : tasks.filter((t) => t.priority === filter);
+    setFilter(filter);
+  }, [filter, setFilter]);
 
   const handleFilterChange = (newFilter: Priority | "todas") => {
     setIsFiltering(true);
     setTimeout(() => {
-      setFilter(newFilter);
+      setLocalFilter(newFilter);
       setIsFiltering(false);
     }, 200);
   };
@@ -35,15 +28,11 @@ export const TaskList: FC<TaskListProps> = ({ tasks, onDelete, error }) => {
     { value: "alta", label: "Prioridad Alta" },
     { value: "media", label: "Prioridad Media" },
     { value: "baja", label: "Prioridad Baja" },
+    { value: "completadas", label: "Tareas Completadas" },
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="space-y-6"
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }} className="space-y-6">
       <div className="sticky top-0 z-10 bg-gray-50 dark:bg-gray-800 p-3 -mx-3 rounded-xl">
         <div className="flex items-center gap-2 overflow-auto pb-1 scrollbar-hide">
           {filterOptions.map((option) => (
@@ -65,33 +54,15 @@ export const TaskList: FC<TaskListProps> = ({ tasks, onDelete, error }) => {
       </div>
 
       {tasks.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="py-16 text-center"
-        >
-          <p className="text-gray-500 dark:text-gray-400 mb-2">Aún no hay tareas</p>
-          <p className="text-gray-400 dark:text-gray-500 text-sm">Agrega tu primera tarea usando el formulario</p>
-        </motion.div>
-      ) : filteredTasks.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="py-16 text-center"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-16 text-center">
           <p className="text-gray-500 dark:text-gray-400 mb-2">No hay tareas con esta prioridad</p>
           <p className="text-gray-400 dark:text-gray-500 text-sm">Prueba con otro filtro o agrega más tareas</p>
         </motion.div>
       ) : (
-        <motion.div
-          layout
-          className="space-y-3"
-          animate={{ opacity: isFiltering ? 0.5 : 1 }}
-          transition={{ duration: 0.2 }}
-        >
+        <motion.div layout className="space-y-3" animate={{ opacity: isFiltering ? 0.5 : 1 }} transition={{ duration: 0.2 }}>
           <AnimatePresence mode="popLayout">
-            {filteredTasks.map((task) => (
-              <TaskItem key={task.id} task={task} onDelete={onDelete} />
+            {tasks.map((task) => (
+              <TaskItem key={task.id} task={task} onDelete={deleteTask} />
             ))}
           </AnimatePresence>
         </motion.div>
