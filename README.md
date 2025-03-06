@@ -1,54 +1,133 @@
-# React + TypeScript + Vite
+# 📌 Todo Task List
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📖 Descripción
 
-Currently, two official plugins are available:
+Una aplicación de gestión de tareas desarrollada con **React, TypeScript y Zustand**, que permite organizar tareas con prioridades y subtareas. Se han aplicado patrones de diseño como **Strategy** para el filtrado de tareas y **Composite** para la gestión de subtareas, asegurando un código modular y reutilizable.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Tecnologías Usadas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React** (Vite + TypeScript)
+- **Zustand** (Gestión de estado)
+- **Axios** (Consumo de API)
+- **TanStack Query** (Gestión de datos remotos)
+- **Framer Motion** (Animaciones)
+- **Tailwind CSS** (Estilización)
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+---
+
+## 🛠️ Funcionalidades
+
+✔ **Agregar tareas** con prioridad (Alta, Media, Baja).\
+✔ **Marcar tareas como completadas**.\
+✔ **Eliminar tareas**.\
+✔ **Filtrar tareas** por prioridad y estado (Pendientes/Completadas).\
+✔ **Agrupar tareas y subtareas** (Patrón Composite).\
+✔ **Persistencia de tareas** con Zustand y React Query.\
+✔ **Interfaz animada** con Framer Motion.
+
+---
+
+## 🏗️ Arquitectura del Proyecto
+
+```plaintext
+src/
+├── api/               # Servicios API con Axios
+│   ├── client.ts      # Cliente Axios configurado
+│   ├── services/      # Endpoints organizados por funcionalidad
+│   │   ├── createTask.ts
+│   │   ├── deleteTask.ts
+│   │   ├── getTasks.ts
+│   │   ├── updateTask.ts
+│
+├── components/        # Componentes UI reutilizables
+│   ├── PriorityBadge.tsx
+│   ├── TaskForm.tsx
+│   ├── TaskItem.tsx
+│   ├── TaskList.tsx
+│
+├── hooks/             # Hooks personalizados
+│   ├── useCreateTask.ts
+│   ├── useDeleteTask.ts
+│   ├── useTasks.ts
+│   ├── useUpdateTask.ts
+│
+├── pages/             # Páginas principales
+│   ├── TaskHub.tsx    # Página principal con lista de tareas
+│
+├── store/             # Gestión de estado con Zustand
+│   ├── taskStore.ts
+│
+├── types/             # Tipos y patrones de diseño
+│   ├── strategies/    # Patrón Strategy (Filtrado de tareas)
+│   │   ├── filterStrategies.ts
+│   ├── composite/     # Patrón Composite (Gestión de subtareas)
+│   │   ├── taskComposite.ts
+│   ├── task.ts        # Definiciones de tipos de tareas
+│
+└── App.tsx            # Punto de entrada de la app
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🎯 Patrones de Diseño Aplicados
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+### 🏁 **Strategy (Filtrado de Tareas)**
+
+Se implementó el patrón **Strategy** para permitir la selección dinámica de diferentes estrategias de filtrado sin modificar la estructura del código base.
+
+```typescript
+export interface FilterStrategy {
+  filter(tasks: Task[]): Task[];
+}
+
+export class PriorityFilterStrategy implements FilterStrategy {
+  constructor(private priority: Priority) {}
+  filter(tasks: Task[]): Task[] {
+    return tasks.filter(task => task.priority === this.priority);
+  }
+}
 ```
+
+### 🌳 **Composite (Gestión de Subtareas)**
+
+El patrón **Composite** permite modelar la relación jerárquica entre tareas principales y subtareas, facilitando la organización y manipulación estructurada de datos.
+
+```typescript
+export class TaskComposite {
+  private subtasks: TaskComposite[] = [];
+  constructor(public id: number, public title: string) {}
+  addSubtask(task: TaskComposite) { this.subtasks.push(task); }
+  getSubtasks(): TaskComposite[] { return this.subtasks; }
+}
+```
+
+---
+
+## 📦 Instalación y Uso
+
+### 🔧 **1. Clonar el repositorio**
+
+```sh
+git clone https://github.com/usuario/todo-task-list.git
+cd todo-task-list
+```
+
+### 📦 **2. Instalar dependencias**
+
+```sh
+npm install
+```
+
+### 🚀 **3. Ejecutar en modo desarrollo**
+
+```sh
+npm run dev
+```
+
+---
+
+## 📜 Licencia
+
+Este proyecto está bajo la **MIT License**.
