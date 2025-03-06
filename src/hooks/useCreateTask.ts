@@ -1,15 +1,16 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { createTaskService } from "../api/services/createTask";
 import { TaskCreation } from "../types/task";
+import { useTaskStore } from "../store/taskStore";
 
 export const useCreateTask = () => {
-  const queryClient = useQueryClient();
+  const { addClientTask } = useTaskStore((state) => state.actions);
 
   return useMutation({
     mutationFn: (newTask: TaskCreation) =>
       createTaskService.create(newTask),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    onSuccess: (createdTask) => {
+      addClientTask(createdTask);
     },
   });
 };
