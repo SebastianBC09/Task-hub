@@ -3,17 +3,20 @@ import { Task, TaskCreation, TaskCreator } from "../../types/task";
 
 export class CreateTaskService implements TaskCreator {
   async create(task: TaskCreation): Promise<Task> {
-    const response = await apiClient.post("/todos", {
+    const simulatedResponse = await apiClient.post("/todos", {
       title: task.title,
       completed: task.completed || false,
       userId: 1,
-      body: JSON.stringify({ priority: task.priority }),
+      body: task.priority,
     });
 
+    const clientSideId = -(Date.now());
+
     return {
-      ...response.data,
+      id: clientSideId,
+      title: simulatedResponse.data.title,
+      completed: simulatedResponse.data.completed,
       priority: task.priority,
-      id: response.data.id,
     };
   }
 }
